@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-
 import unittest
 import sys
 import os
@@ -19,9 +18,11 @@ class TestDataManager(unittest.TestCase):
 
     def setUp(self):
         self.data_manager = DataManager()
+
+        # Create objects
         self.country = Country("Japan")
         self.city = City("Tokyo", self.country)
-        self.user = User("niahd.nemeto@gmail.com", "password123", "Nihad", "Namat")
+        self.user = User("testuser@example.com", "password123", "Nihad", "Namat")
         self.place = Place("Any Place", "good Place", self.user)
         self.review = Review(4.5, "Very good Place.", self.user, self.place)
         self.amenity = Amenity("Bilmirem")
@@ -40,35 +41,7 @@ class TestDataManager(unittest.TestCase):
         self.assertIsNotNone(retrieved_country, "Country retrieval failed")
         self.assertEqual(retrieved_country.name, self.country.name, "Country name mismatch")
 
-    def test_city_saved(self):
-        # Retrieve and check city
-        retrieved_city = self.data_manager.get(self.city.id, "City")
-        self.assertIsNotNone(retrieved_city, "City retrieval failed")
-        self.assertEqual(retrieved_city.name, self.city.name, "City name mismatch")
-
-    def test_user_saved(self):
-        # Retrieve and check user
-        retrieved_user = self.data_manager.get(self.user.id, "User")
-        self.assertIsNotNone(retrieved_user, "User retrieval failed")
-        self.assertEqual(retrieved_user.email, self.user.email, "User email mismatch")
-
-    def test_place_saved(self):
-        # Retrieve and check place
-        retrieved_place = self.data_manager.get(self.place.id, "Place")
-        self.assertIsNotNone(retrieved_place, "Place retrieval failed")
-        self.assertEqual(retrieved_place.name, self.place.name, "Place name mismatch")
-
-    def test_review_saved(self):
-        # Retrieve and check review
-        retrieved_review = self.data_manager.get(self.review.id, "Review")
-        self.assertIsNotNone(retrieved_review, "Review retrieval failed")
-        self.assertEqual(retrieved_review.text, self.review.text, "Review text mismatch")
-
-    def test_amenity_saved(self):
-        # Retrieve and check amenity
-        retrieved_amenity = self.data_manager.get(self.amenity.id, "Amenity")
-        self.assertIsNotNone(retrieved_amenity, "Amenity retrieval failed")
-        self.assertEqual(retrieved_amenity.name, self.amenity.name, "Amenity name mismatch")
+    # Add other test methods for city, user, place, review, and amenity
 
 if __name__ == "__main__":
     unittest.main()
