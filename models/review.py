@@ -12,4 +12,6 @@ class Review(BaseModel):
         self.comment = comment
         self.user = user
         self.place = place
-
+    
+    def __str__(self):
+        return f"Review(rating={self.rating}, comment='{self.comment}', user='{self.user}', place='{self.place}')"

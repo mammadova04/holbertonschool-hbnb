@@ -12,3 +12,6 @@ class Place(BaseModel):
         self.name = name
         self.description = description
         self.host = host
+
+    def __str__(self):
+        return f"Place(name={self.name}, description={self.description})"

@@ -9,3 +9,6 @@ class City(BaseModel):
         super().__init__()
         self.name = name
         self.country = country
+
+    def __str__(self):
+        return f"City(name={self.name}, country={self.country})"
