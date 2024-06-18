@@ -1,12 +1,14 @@
-from persistence.persistence import IPersistenceManager
-from models.country import Country
-from models.city import City
-from models.user import User
-from models.place import Place
-from models.review import Review
-from models.amenity import Amenity
+#!/usr/bin/python3
 
-class DataManager(IPersistenceManager):
+from persistence.persistence import IPersistanceManager
+from ..models.country import Country
+from ..models.city import City
+from ..models.user import User
+from ..models.place import Place
+from ..models.review import Review
+from ..models.amenity import Amenity
+
+class DataManager(IPersistanceManager):
     def __init__(self):
         # Store Entities
         self.dataStore = {
