@@ -31,3 +31,23 @@ class DataManager(IPersistenceManager):
     def get(self, entityID, entityType):
         # if there is no entityType return {}. If there is no entityID return None 
         return self.dataStore.get(entityType, {}).get(entityID, None)
+    
+    # Upadte Entities
+    def update(self, entity):
+        # Define Type
+        entityType = type(entity).__name__
+        # Get ID
+        entityID = entity.id
+
+        # Update entity for entityType and entityID
+        if entityType in self.dataStore and entityID in self.dataStore[entityType]:
+            self.dataStore[entityType][entityID] = entity
+        else:
+            raise ValueError(f"{entityType} doesn't exist.")
+    
+    # Delete Entities
+    def delete(self, entityID, entityType):
+        if entityType in self.dataStore and entityID in self.dataStore[entityType]:
+            del self.dataStore[entityType][entityID]
+        else:
+            raise ValueError(f"{entityID} nad {entityType} doesn't exists")
