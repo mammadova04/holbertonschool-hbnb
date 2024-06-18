@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Importing BaseModel class"""
-from model.base_model import BaseModel
-from model.country import Country
+from models.base_model import BaseModel
+from models.country import Country
 
 class City(BaseModel):
     """City class"""

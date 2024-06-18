@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Importing BaseModel class"""
-from model.base_model import BaseModel
-from model.user import User
+from models.base_model import BaseModel
+from models.user import User
 
 class Place(BaseModel):
     """Class named Place"""

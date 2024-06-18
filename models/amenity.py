@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """Importing BaseModel Class"""
-from model.base_model import BaseModel
+from models.base_model import BaseModel
 
 class Amenity(BaseModel):
     """Amenity Class"""
