@@ -60,3 +60,12 @@ def getUser(user_id):
     if not user:
         return jsonify({'message': 'User not found.'}), 404
     return jsonify(userToDict(user)), 200
+
+@userRoutes.route('/users/<uuid:user_id>', methods=['DELETE'])
+def deleteUser(user_id):
+    # Convert uuid to string
+    user = dataManager.get(str(user_id), 'User')
+    if not user:
+        return jsonify({"ERROR": "USER NOT FOUND"})
+    dataManager.delete(str(user_id), 'User')
+    return '', 204
