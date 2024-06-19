@@ -51,3 +51,12 @@ def addUser():
     user = User(email=data['email'], password=data['password'], first_name=data['first_name'], last_name=data['last_name'])
     dataManager.save(user)
     return jsonify(userToDict(user)), 201
+
+# Get Specific User with ID
+@userRoutes.route('/users/<uuid:user_id>', methods=['GET'])
+def getUser(user_id):
+    # Convert uuid to string    
+    user = dataManager.get(str(user_id), 'User')
+    if not user:
+        return jsonify({'message': 'User not found.'}), 404
+    return jsonify(userToDict(user)), 200
