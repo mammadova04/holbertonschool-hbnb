@@ -5,9 +5,10 @@ from models.country import Country
 
 class City(BaseModel):
     """City class"""
-    def __init__(self, name, country):
+    def __init__(self, name, country, country_code):
         super().__init__()
         self.name = name
+        self.country_code = country_code
         self.country = country
 
     def __str__(self):

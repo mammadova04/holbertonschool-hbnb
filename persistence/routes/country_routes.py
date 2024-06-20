@@ -17,7 +17,19 @@ def countryToDict(country):
         'name': country.name
     }
 
+# Get list of Countries from data folder country_codes.json file. It load all countries in json file
+# with defined keys in model/country.py file
 @countryRoutes.route('/countries', methods=['GET'])
 def getCountries():
     return jsonify([countryToDict(country) for country in countries.values()]), 200
+
+# Get Country for specific code
+@countryRoutes.route('/countries/<string:countryCode>', methods=['GET'])
+def getCountryWithCode(countryCode):
+    country = countries.get(countryCode)
+    
+    # Check Country exists or not
+    if not country:
+        return jsonify({"ERROR": "COUNTRY NOT FOUND"}), 404
+    return jsonify(countryToDict(country)), 200
 
