@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
 from flask import Blueprint, request, jsonify
-from model.amenity import Amenity
-from persistence.datamanager import DataManager
+from models.amenity import Amenity
+from persistence.data_manager import DataManager
+from datetime import datetime
 
 data_manager = DataManager()
 amenityRoutes = Blueprint('amenityRoutes', __name__)

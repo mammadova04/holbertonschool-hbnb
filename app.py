@@ -3,6 +3,7 @@
 from flask import Flask
 from persistence.routes.user_routes import userRoutes
 from persistence.routes.country_routes import countryRoutes
+from persistence.routes.city_routes import cityRoutes
 from persistence.routes.amenity_routes import amenityRoutes
 
 app = Flask(__name__)
