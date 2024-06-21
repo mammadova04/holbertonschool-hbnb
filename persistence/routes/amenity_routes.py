@@ -1,53 +1,92 @@
 #!/usr/bin/python3
 
-from flask import Blueprint, request, jsonify
-from models.amenity import Amenity
+from flask import Blueprint, jsonify, request
 from persistence.data_manager import DataManager
+from models.amenity import Amenity
 from datetime import datetime
 
-data_manager = DataManager()
-amenityRoutes = Blueprint('amenityRoutes', __name__)
+amenityRoutes = Blueprint('amenity_routes', __name__)
+dataManager = DataManager()
 
+# Helper function to convert Amenity object to dictionary
+def amenity_to_dict(amenity):
+    return {
+        'id': amenity.id,
+        'name': amenity.name,
+        'created_at': amenity.created_at,
+        'updated_at': amenity.updated_at
+    }
+
+# POST /amenities - Create a new amenity
+@amenityRoutes.route('/amenities', methods=['POST'])
+def add_amenity():
+    data = request.json
+
+    if 'name' not in data:
+        return jsonify({'error': 'Missing required field "name"'}), 400
+
+    name = data['name']
+
+    # Check if amenity name already exists
+    existing_amenity = next((amenity for amenity in dataManager.dataStore['Amenity'].values() if amenity.name == name), None)
+    if existing_amenity:
+        return jsonify({'error': 'Amenity with this name already exists'}), 409
+
+    new_amenity = Amenity(name=name, created_at=datetime.utcnow(), updated_at=datetime.utcnow())
+    dataManager.save_amenity(new_amenity)
+
+    return jsonify(amenity_to_dict(new_amenity)), 201
+
+# GET /amenities - Retrieve all amenities
 @amenityRoutes.route('/amenities', methods=['GET'])
 def get_amenities():
-    """Retrieve a list of all amenities"""
-    amenities = data_manager.get_all_amenities()
-    return jsonify([amenity.to_dict() for amenity in amenities]), 200
+    amenities = [amenity_to_dict(amenity) for amenity in dataManager.get_all_amenities()]
+    return jsonify(amenities), 200
 
-@amenityRoutes.route('/amenities/<string:amenity_id>', methods=['GET'])
+# GET /amenities/<amenity_id> - Retrieve a specific amenity
+@amenityRoutes.route('/amenities/<int:amenity_id>', methods=['GET'])
 def get_amenity(amenity_id):
-    """Retrieve detailed information about a specific amenity"""
-    amenity = data_manager.get(amenity_id, 'Amenity')
+    amenity = dataManager.get_amenity(amenity_id)
+
     if not amenity:
-        return jsonify({'message': 'Amenity not found'}), 404
-    return jsonify(amenity.to_dict()), 200
+        return jsonify({'error': 'Amenity not found'}), 404
 
-@amenityRoutes.route('/amenities', methods=['POST'])
-def create_amenity():
-    """Create a new amenity"""
-    data = request.get_json()
-    if data_manager.get_amenity_by_name(data['name']):
-        return jsonify({'message': 'Amenity already exists'}), 409
-    amenity = Amenity(**data)
-    data_manager.save(amenity)
-    return jsonify({'message': 'Amenity created successfully'}), 201
+    return jsonify(amenity_to_dict(amenity)), 200
 
-@amenityRoutes.route('/amenities/<string:amenity_id>', methods=['PUT'])
+# PUT /amenities/<amenity_id> - Update an existing amenity
+@amenityRoutes.route('/amenities/<int:amenity_id>', methods=['PUT'])
 def update_amenity(amenity_id):
-    """Update an existing amenity"""
-    amenity = data_manager.get(amenity_id, 'Amenity')
+    data = request.json
+
+    if 'name' not in data:
+        return jsonify({'error': 'Missing required field "name"'}), 400
+
+    amenity = dataManager.get_amenity(amenity_id)
+
     if not amenity:
-        return jsonify({'message': 'Amenity not found'}), 404
-    data = request.get_json()
-    amenity.update(data)
-    data_manager.update(amenity)
-    return jsonify({'message': 'Amenity updated successfully'}), 200
+        return jsonify({'error': 'Amenity not found'}), 404
 
-@amenityRoutes.route('/amenities/<string:amenity_id>', methods=['DELETE'])
+    name = data['name']
+
+    # Check if another amenity with the same name already exists
+    existing_amenity = next((a for a in dataManager.dataStore['Amenity'].values() if a.id != amenity_id and a.name == name), None)
+    if existing_amenity:
+        return jsonify({'error': 'Amenity with this name already exists'}), 409
+
+    amenity.name = name
+    amenity.updated_at = datetime.utcnow()
+    dataManager.update_amenity(amenity)
+
+    return jsonify(amenity_to_dict(amenity)), 200
+
+# DELETE /amenities/<amenity_id> - Delete a specific amenity
+@amenityRoutes.route('/amenities/<int:amenity_id>', methods=['DELETE'])
 def delete_amenity(amenity_id):
-    """Delete a specific amenity"""
-    if not data_manager.get(amenity_id, 'Amenity'):
-        return jsonify({'message': 'Amenity not found'}), 404
-    data_manager.delete(amenity_id, 'Amenity')
-    return '', 204
+    amenity = dataManager.get_amenity(amenity_id)
 
+    if not amenity:
+        return jsonify({'error': 'Amenity not found'}), 404
+
+    dataManager.delete_amenity(amenity_id)
+
+    return '', 204
