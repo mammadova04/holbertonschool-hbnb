@@ -62,3 +62,5 @@ Every entity in our data model, except for Country, must include the following a
 - **UUID4 Generation:** Utilize Python's `uuid` module to generate UUID4 ids.
 - **Timestamps:** Leverage Python's `datetime` module to record timestamps for creation and updates.
 
+## Authors
+- **Narmin Mammadova** [@mammadova04](https://github.com/mammadova04)
