@@ -65,3 +65,4 @@ Every entity in our data model, except for Country, must include the following a
 ## Authors
 - **Narmin Mammadova** [@mammadova04](https://github.com/mammadova04)
 - **Nihad Nemetli** [@nihad123](https://github.com/nihad123)
+- **Aslan Aslanov** [@as1an87](https://github.com/as1an87)
