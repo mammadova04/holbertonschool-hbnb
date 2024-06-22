@@ -29,4 +29,4 @@ VOLUME ["/app/data"]
 
 # Run the application with Gunicorn
 CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${APP_PORT} app:app"]
- 
+
