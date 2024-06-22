@@ -91,7 +91,38 @@ def getPlace(place_id):
     place = dataManager.get(str(place_id), 'Place')
     if not place:
         return jsonify({'error': 'Place not found'}), 404
-    return jsonify(placeToDict(place)), 200
+    
+    # Get the city associated with the place
+    city = dataManager.get(place.city_id, 'City')
+    if not city:
+        return jsonify({'error': 'City not found'}), 404
+    
+    # Prepare response with detailed place information
+    response = {
+        'id': place.id,
+        'name': place.name,
+        'description': place.description,
+        'address': place.address,
+        'city': {
+            'id': city.id,
+            'name': city.name,
+            'country_code': city.country_code,
+            'created_at': city.created_at,
+            'updated_at': city.updated_at
+        },
+        'latitude': place.latitude,
+        'longitude': place.longitude,
+        'host_id': place.host.id if place.host else None,
+        'number_of_rooms': place.number_of_rooms,
+        'number_of_bathrooms': place.number_of_bathrooms,
+        'price_per_night': place.price_per_night,
+        'max_guests': place.max_guests,
+        'amenities': [amenity.id for amenity in place.amenities],
+        'created_at': place.created_at,
+        'updated_at': place.updated_at
+    }
+    
+    return jsonify(response), 200
 
 # Update an existing place by ID
 @placeRoutes.route('/places/<uuid:place_id>', methods=['PUT'])
@@ -140,3 +171,4 @@ def deletePlace(place_id):
 
     dataManager.delete(str(place_id), 'Place')
     return '', 204
+
