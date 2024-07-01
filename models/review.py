@@ -1,17 +1,20 @@
 #!/usr/bin/python3
-"""Importing BaseModel class"""
+
 from models.base_model import BaseModel
-from models.user import User
-from models.place import Place
 
 class Review(BaseModel):
-    """Creating Review Classs"""
-    def __init__(self, rating, comment, user, place):
+    def __init__(self, user_id, place_id, rating, comment):
         super().__init__()
+        self.user_id = user_id
+        self.place_id = place_id
         self.rating = rating
         self.comment = comment
-        self.user = user
-        self.place = place
-    
+        self.created_at = None  # Implement datetime handling
+        self.updated_at = None
+
     def __str__(self):
-        return f"Review(rating={self.rating}, comment='{self.comment}', user='{self.user}', place='{self.place}')"
+        return f"Review(id={self.id}, user_id={self.user_id}, place_id={self.place_id}, rating={self.rating})"
+
+    def validate_rating(self):
+        if not (1 <= self.rating <= 5):
+            raise ValueError("Rating must be between 1 and 5")
